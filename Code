@@ -1,0 +1,63 @@
+import requests
+import folium
+import webbrowser
+
+# Step 1: Geocode place name -> (lat, lon)
+def geocode(place):
+    url = "https://nominatim.openstreetmap.org/search"
+    params = {"q": place, "format": "json", "limit": 1}
+    response = requests.get(url, params=params, headers={"User-Agent": "Mozilla/5.0"})
+    data = response.json()
+    if not data:
+        raise ValueError(f"Place not found: {place}")
+    return float(data[0]["lat"]), float(data[0]["lon"])
+
+
+# Step 2: Get route (coordinates) using OSRM
+def get_route(start, end):
+    start_lonlat = f"{start[1]},{start[0]}"
+    end_lonlat   = f"{end[1]},{end[0]}"
+    url = f"http://router.project-osrm.org/route/v1/driving/{start_lonlat};{end_lonlat}?overview=full&geometries=geojson"
+
+    response = requests.get(url)
+    data = response.json()
+
+    if "routes" not in data or not data["routes"]:
+        raise ValueError("No route found")
+
+    return data["routes"][0]["geometry"]["coordinates"]
+
+
+# Step 3: Show map in browser
+def show_map(start_coords, end_coords, route_coords, filename="route_map.html"):
+    # Center map between start and end
+    mid_lat = (start_coords[0] + end_coords[0]) / 2
+    mid_lon = (start_coords[1] + end_coords[1]) / 2
+    m = folium.Map(location=[mid_lat, mid_lon], zoom_start=12)
+
+    # Add start & end markers
+    folium.Marker(start_coords, popup="Start", icon=folium.Icon(color="green")).add_to(m)
+    folium.Marker(end_coords, popup="End", icon=folium.Icon(color="red")).add_to(m)
+
+    # Draw route polyline (OSRM returns lon,lat → need lat,lon)
+    route_latlon = [(lat, lon) for lon, lat in route_coords]
+    folium.PolyLine(route_latlon, color="blue", weight=5).add_to(m)
+
+    # Save and open in browser
+    m.save(filename)
+    webbrowser.open(filename)
+
+
+if __name__ == "__main__":
+    start_place = input("Enter start location: ")
+    end_place   = input("Enter destination: ")
+
+    # Convert names to coordinates
+    start_coords = geocode(start_place)
+    end_coords   = geocode(end_place)
+
+    # Get route from OSRM
+    route = get_route(start_coords, end_coords)
+
+    # Show map in browser
+    show_map(start_coords, end_coords, route)
