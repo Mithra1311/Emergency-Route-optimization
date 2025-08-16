@@ -1,0 +1,37 @@
+Emergency response time plays a crucial role in saving lives and minimizing damage during critical situations such as medical emergencies, fire accidents, and natural disasters.
+Traditional navigation systems may not always provide the most optimized routes for emergency vehicles, especially in congested urban areas. This project, Emergency Route 
+Optimization, focuses on identifying the shortest and most efficient path between a source and a destination using OpenStreetMap (OSM) data and routing algorithms.The system 
+takes a starting and ending location as input and generates the optimized route, which is then displayed on an interactive map in the browser. By leveraging real-world map data 
+and advanced pathfinding techniques, the project ensures accurate, reliable, and visually clear directions for emergency responders.
+
+The solution not only improves travel time but also enhances decision-making in critical scenarios where every second counts. Future enhancements include integrating real-time 
+traffic data, GPS tracking, and predictive AI models for advanced disaster management. Ultimately, this project demonstrates a practical application of route optimization 
+technology to support emergency services and improve public safety.
+
+Features
+Uses OpenStreetMap (OSM) data and OSRM (Open Source Routing Machine) for pathfinding.
+Displays results on an interactive map in the browser.
+Helps emergency vehicles (ambulance, fire, police) reach their destination quickly.
+Modular design for easy updates and integration with other systems.
+
+Installation
+Clone the repository:
+git clone https://github.com/Mithra1311/Emergency-Route-Optimization.git
+cd Emergency-Route-Optimization
+
+
+Install dependencies:
+pip install -r requirements.txt
+
+How to Run
+Run the main script:
+python main.py
+
+Open your browser and view the interactive route output.
+
+Future Improvements
+Real-time traffic data integration for more accurate route optimization.
+Support for multiple emergency vehicles with priority routing.
+Mobile app version for on-the-go usage.
+Integration with Google Maps API and live GPS tracking.
+Advanced AI models for predictive route planning during disasters.
